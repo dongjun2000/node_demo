@@ -22,3 +22,46 @@ module.exports 才是真正的接口，exports 只不过是它的一个辅助工
 如果，module.exports 已经具备一些属性和方法，那么 exports 收集来的信息将被忽略。
 
 NodeJs开发者建议导出对象用module.exports,导出多个方法和变量用exports
+
+#### CommonJS 规范
+
+使用模块的好处？
+
+* 最大的好处就是大大提高了代码的可维护性。
+* 其次，编写代码不必从零开始，当一个模块编写完毕，就可以被其他地方引用。
+* 我们在编写程序的时候，也经常引用其它模块，包括 Node 内置的模块和来自第三方的模块。
+* 使用模块还可以避免函数名和变量名冲突。相同名字的函数和变量完全可以分别存在不同的模块中。
+
+导出模块：
+
+```javascript
+const s = 'Hello';
+
+var s = 'hello';
+
+function greet(name) {
+    console.log(s + ', ' + name + '!');
+}
+
+module.exports = greet;
+```
+
+引入模块，如果只写模块名：
+
+```javascript
+const greet = require('hello');
+```
+
+则 Node 会依次在 内置模块、全局模块 和 当前模块 下查找 hello.js
+
+加载项目中自定义的模块，需要相对路径(相对于当前模块)或者绝对路径。
+
+```javascript
+const greet = require('./hello');
+```
+
+这种模块加载机制就被称为 CommonJS 规范。
+
+在这个规范下，每个 `.js` 文件都是一个模块，它们内部各自使用的变量名和函数名都互不冲突。
+
+一个模块想要对外暴露变量（函数也是变量），可以用 `module.exports = variable;`，一个模块要引用其他模块暴露的变量，用 `var ref = require('module_name');` 就拿到了引用模块的变量。
