@@ -23,6 +23,34 @@ module.exports 才是真正的接口，exports 只不过是它的一个辅助工
 
 NodeJs开发者建议导出对象用module.exports,导出多个方法和变量用exports
 
+原理：
+
+```javascript
+var module = {
+    id: 'hello',
+    exports: {}
+};
+
+var load = function (exports, module) {
+    // node模块中的代码
+    //...
+    
+    // exports.fn1 = function () {};
+    // exports.fn2 = function () {};
+    
+    /*
+    module.exports = {
+        fn3: function () {}, 
+        fn4: function () {}
+    };
+    */
+    
+    return module.exports;    
+};
+
+var exported = load(module.exports, module);
+```
+
 #### CommonJS 规范
 
 使用模块的好处？
