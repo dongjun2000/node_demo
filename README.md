@@ -11,5 +11,6 @@
 * redis             ---  与 Redis 交互
 * mongodb           ---  与 MongoDB 交互
 * schedule          ---  定时任务
+* cluster           ---  集群 - 多进程
 * pm2               ---  使用 pm2
 
