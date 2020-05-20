@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>文件表单</title>
+</head>
+<body>
+<div id="face"></div>
+<form action="/profile" method="post" enctype="multipart/form-data">
+    <p><input type="text" name="user" placeholder="姓名"></p>
+    <p><input type="text" name="age" placeholder="年龄"></p>
+    <p><input type="file" name="face" multiple></p>
+    <p>
+        <button type="submit">提交</button>
+    </p>
+</form>
+
+<script>
+    let form = document.getElementsByTagName('form')[0];
+    form.onsubmit = function () {
+        let formData = new FormData(form);
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    let data = JSON.parse(this.responseText);
+                    let html = '';
+                    data.forEach((item) => {
+                        html += `<img src="/uploads/${item}">`;
+                    });
+                    let face = document.getElementById('face');
+                    face.innerHTML = html;
+                }
+            }
+        };
+        xhr.open('POST', '/profile', true);
+        xhr.send(formData);
+        return false;
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>拖拽上传</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #drag {
+            width: 400px;
+            height: 200px;
+            margin-top: -100px;
+            margin-left: -200px;
+            border: 1px solid #999;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            text-align: center;
+            line-height: 200px;
+            background-color: #cccccc;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            let drag = document.querySelector('#drag');
+            drag.ondragenter = function () {
+                drag.innerHTML = '松手上传';
+            };
+            drag.ondragleave = function () {
+                drag.innerHTML = '请拖到这里';
+            };
+            drag.ondragover = function () {         // 只要鼠标还没松手，并且还没离开，一直不停发生
+                console.log('aaa');
+
+                return false;
+            };
+            drag.ondrop = function (event) {
+//                alert('松手');
+
+                let formData = new FormData();
+
+                // console.log(event.dataTransfer.files);
+                Array.from(event.dataTransfer.files).forEach(file => {
+                    formData.append('f1', file);
+                });
+
+                let xhr = new XMLHttpRequest();
+
+                xhr.onreadystatechange = function () {
+                    if (this.readyState === 4) {
+                        if (this.status === 200) {
+                            let data = JSON.parse(this.responseText);
+                            let html = '';
+                            data.forEach((item) => {
+                                html += `<img src="/uploads/${item}">`;
+                            });
+                            let face = document.getElementById('face');
+                            face.innerHTML = html;
+                        }
+                    }
+                };
+                xhr.open('POST', '/profile', true);
+                xhr.send(formData);
+
+                return false;
+            };
+        };
+    </script>
+</head>
+<body>
+<div id="face"></div>
+<div id="drag">
+    请拖到这里
+</div>
+</body>
+</html>
